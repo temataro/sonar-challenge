@@ -1,0 +1,107 @@
+---
+title: Sonar Challenge 2024
+theme: "journal"
+# https://quarto.org/docs/dashboards/theming.html
+highlight-style: github
+author: github.com/temataro
+toc:              true
+number-sections:  true
+format:
+  html:
+    code-tools:   true
+---
+
+[ASA Student Sonar Challenge 2024](https://acousticstoday.org/wp-content/uploads/2024/07/AT-Summer-SP-1.pdf)
+
+---
+
+```{python}
+#| code-fold: true
+#| code-summary: "Show the code"
+# imports
+import glob
+import numpy as np
+import scipy.signal as sp
+import numpy.typing as npt
+import matplotlib.pyplot as plt
+from scipy.io.wavfile import read, write
+
+plt.style.use("ggplot")  # https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html
+```
+
+## Task 1
+    Two sequences (or trains) of dolphin echolocation clicks are evident: one
+    sequence starts near the beginning (emitted by dolphin A) and the other (by
+    dolphin B) starts near the middle. Other extraneous impulses observed in the
+    data file can, in the main, be attributed to the snaps of shrimp.
+
+    The first task is to detect the echolocation clicks and record the time of
+    arrival (TOA) of the peak pressure (maximum amplitude) of each click at H2 for
+    click sequence A emitted by dolphin A and then repeat for click sequence B.
+
+    (1) _In microseconds, what is the uncertainty in your TOA measurement of a
+    click’s maximum amplitude (or peak pressure)?_
+
+    (2) _For each click sequence, plot the variation with click number of the
+    interclick interval (ICI), i.e., the time difference of arrival of consecutive
+    clicks or the time interval (time span) between successive click peak
+    pressures. Calculate the mean and standard deviation of the ICI for each
+    click sequence along with the total number of clicks (N)._
+
+    (3) _For technological sonars, the pulse repetition frequency is
+    constant, i.e., the time interval between sonar pulse transmissions is
+    constant. Is this the case for the echolocation biosonars of dolphins A and B?_
+
+___
+
+```{python}
+print("Hello, World!")
+```
+
+
+## Task 2
+    The next task involves locating the positions of the sources of the clicks,
+    i.e., localizing the sound projectors of the echolocating dolphins.
+    This task requires associating each click received on H2 with its counterparts
+    in the sequences received on the adjacent hydrophones H1 and H3. Intuitively,
+    the difference in a click’s arrival times, i.e., the differential time of
+    arrival (DTOA), at a pair of hydrophones has directional information. For
+    instance, when the DTOA is zero, (i.e., the TOAs are the same), the source is
+    in a broadside direction (i.e., at right angles to the array axis).
+    Similarly, for a pair of adjacent hydrophones separated by a distance d = 14 m,
+    if the DTOA has a maximum value of + d ⁄c = 14 ⁄ 1520 ≈ 9.2 ms (where c = 1520
+    m/s is the isospeed of sound travel in the underwater medium for the present
+    experiment and ‘ms’ denotes milliseconds), then the source is in an end-fire
+    direction (i.e., in the direction of the array axis).
+
+    When the DTOA has a minimum value of –d⁄ c , the source is in the other endfire
+    direction. The source bearing (β) is measured in a counterclockwise direction
+    with respect to the (east-west) array axis, e.g., β = 0° is due east and β =
+    90° is due north. Whereas only one pair of hydrophones is required to estimate
+    the source bearing (i.e., the angle of the source relative to the array axis),
+    two adjacent pairs are required to estimate the source range. The range (R) is
+    measured with respect to the origin, i.e., the position of the middle
+    hydrophone H2.
+
+
+    (1) _For dolphin A, plot the variation with click number of the source bearing.
+    Calculate the mean and standard deviation of dolphin A’s bearing estimates for
+    the echolocation click sequence along with the total number of clicks (N).
+    Repeat for dolphin B. Comment on how well your estimates localize the direction
+    of each echolocating dolphin. Do your bearing estimates indicate that the
+    source is in motion? Are you able to estimate the precision of your bearing
+    estimation method, where the term precision is used to indicate the closeness
+    with which the measurements agree with one another quite independently of any
+    systematic error involved; the precision is limited by random errors and
+    excludes any systematic (or bias) errors._
+
+
+    (2) _For dolphin A, plot the variation with click number of source range.
+    Calculate the mean and standard deviation of dolphin A’s range estimates for
+    the echolocation click sequence along with the total number of clicks (N).
+    Repeat for dolphin B. Comment on how well your estimates localize the range of
+    each echolocating dolphin._
+
+```{python}
+print("Hello, World!")
+```
