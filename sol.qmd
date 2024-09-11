@@ -59,11 +59,42 @@ data_dir: str = "./data"
 
 channels: list[npt.NDArray] = []
 for wav_file in glob.glob(data_dir + "/*.wav"):
-    _, data = read(wav_file)
+    sr, data = read(wav_file)
     channels.append(data)
 
 # channels
-channels
+```
+
+Graph of waveform and spectrogram for each hydrophone.
+```{python}
+#| code-fold: true
+#| label:        Channel Waveforms
+#| fig-cap:      "Hydrophone Waveforms"
+#| fig-subcap:
+#|  - "Hydrophone 1"
+#|  - "Hydrophone 2"
+#|  - "Hydrophone 3"
+#| fig-align: center
+
+h1 = channels[0]
+h2 = channels[1]
+h3 = channels[2]
+
+rec_time: list[float] = [i.size / sr for i in channels]  # This is actually the same for all recordings
+
+fig, axs = plt.subplots(nrows=3, ncols=2, figsize=(15, 18))
+for h, hydro in enumerate(channels):
+    t: npt.NDArray[np.float64] = np.linspace(0, rec_time[h], channels[h].size)
+    axs[h, 0].plot(t, hydro, "g")
+    axs[h, 0].set_xlabel("Time (s)")
+    axs[h, 0].set_ylabel("Amplitude")
+    axs[h, 0].set_title(f"Hydrophone {h + 1} Waveform")
+    axs[h, 0].grid(True)
+    f, t, Sxx = sp.spectrogram(hydro.astype(np.float64)/np.linalg.norm(hydro), fs=sr)
+    axs[h, 1].pcolormesh(t, f, Sxx, cmap="gnuplot2")
+    axs[h, 1].set_xlabel("Time (s)")
+    axs[h, 1].set_ylabel("Frequency")
+    axs[h, 1].set_title(f"Hydrophone {h + 1} Spectrogram")
 ```
 
 
