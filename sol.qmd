@@ -1,6 +1,6 @@
 ---
 title: Sonar Challenge 2024
-theme: "journal"
+theme: "superhero"
 # https://quarto.org/docs/dashboards/theming.html
 highlight-style: github
 author: github.com/temataro
@@ -9,6 +9,8 @@ number-sections:  true
 format:
   html:
     code-tools:   true
+execute:
+ freeze: auto
 ---
 
 [ASA Student Sonar Challenge 2024](https://acousticstoday.org/wp-content/uploads/2024/07/AT-Summer-SP-1.pdf)
