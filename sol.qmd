@@ -8,6 +8,7 @@ toc:              true
 number-sections:  true
 format:
   html:
+    page-layout:  full
     code-tools:   true
 execute:
  freeze: auto
@@ -64,7 +65,6 @@ for wav_file in glob.glob(data_dir + "/*.wav"):
     sr, data = read(wav_file)
     channels.append(data)
 
-# channels
 ```
 
 Graph of waveform and spectrogram for each hydrophone.
@@ -76,7 +76,9 @@ Graph of waveform and spectrogram for each hydrophone.
 #|  - "Hydrophone 1"
 #|  - "Hydrophone 2"
 #|  - "Hydrophone 3"
-#| fig-align: center
+#| fig-align: default
+#| out-width: 100%
+#| fig-format: svg
 
 h1 = channels[0]
 h2 = channels[1]
@@ -84,7 +86,7 @@ h3 = channels[2]
 
 rec_time: list[float] = [i.size / sr for i in channels]  # This is actually the same for all recordings
 
-fig, axs = plt.subplots(nrows=3, ncols=2, figsize=(15, 18))
+fig, axs = plt.subplots(nrows=3, ncols=2, figsize=(20, 18))
 for h, hydro in enumerate(channels):
     t: npt.NDArray[np.float64] = np.linspace(0, rec_time[h], channels[h].size)
     axs[h, 0].plot(t, hydro, "g")
