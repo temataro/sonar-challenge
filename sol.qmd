@@ -31,6 +31,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from scipy.io.wavfile import read, write
 
 plt.style.use("ggplot")  # https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html
+colors: list[str] = ["#00FFFF", "#FF00FF", "#39FF14", "#FFFF00", "#FFA500"]
 ```
 
 ## Task 1
@@ -66,6 +67,7 @@ for wav_file in glob.glob(data_dir + "/*.wav"):
     sr, data = read(wav_file)
     channels.append(data)
 
+print(f"{sr=}")
 ```
 
 Illustration of hydrophone array in space.
@@ -128,7 +130,6 @@ ax.set_title("3D Cylindrical Shapes at Points H1, H2, H3")
 
 plt.show()
 ```
-
 Graph of waveform and spectrogram for each hydrophone.
 ```{python}
 #| code-fold: true
@@ -161,6 +162,45 @@ for h, hydro in enumerate(channels):
     axs[h, 1].set_xlabel("Time (s)")
     axs[h, 1].set_ylabel("Frequency")
     axs[h, 1].set_title(f"Hydrophone {h + 1} Spectrogram")
+```
+
+Let's try to answer task 1 in a few different ways:
+
+1. FFT/Periodogram to check the frequency of these clicks
+2. Cross-correlating a single click with the entire waveform and finding lags
+3. Make a special wavelet to see if we can identify where and when our clicks happen
+
+```{python}
+#| code-fold: true
+#| label:        Periodogram
+#| fig-cap:      "Hydrophone Periodograms"
+#| fig-subcap:
+#|  - "Hydrophone 1 Periodogram"
+#|  - "Hydrophone 2 Periodogram"
+#|  - "Hydrophone 3 Periodogram"
+#| fig-align: default
+#| out-width: 100%
+#| fig-format: svg
+
+fig, axs = plt.subplots(nrows=3, ncols=1, figsize=(20, 18))
+for h, hydro in enumerate(channels):
+    axs[h].set_title(f"Hydrophone {h + 1} Periodogram")
+    f, Pxx = sp.periodogram(
+                            hydro,
+                            sr,
+                            # nfft=1024,
+                            window='hamming',
+                            return_onesided=True
+            )
+    axs[h].semilogy(f, Pxx, color=colors[h])
+    pks, _ = sp.find_peaks(Pxx, threshold=100)
+    axs[h].axvline(f[pks[0]], linestyle='-.')
+    axs[h].text(f[pks[0]]+10, 120, f"Peak at {f[pks[0]]:.2f} Hz.")
+    axs[h].set_xlim([0, 22_000])  # Limiting BW to audible clicks
+    axs[h].set_xlabel("Frequency (Hz)")
+    axs[h].set_ylabel("PSD (V^2 / Hz)")
+    axs[h].grid(True)
+plt.show()
 ```
 
 
