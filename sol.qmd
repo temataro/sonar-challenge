@@ -27,6 +27,7 @@ import numpy as np
 import scipy.signal as sp
 import numpy.typing as npt
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 from scipy.io.wavfile import read, write
 
 plt.style.use("ggplot")  # https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html
@@ -65,6 +66,67 @@ for wav_file in glob.glob(data_dir + "/*.wav"):
     sr, data = read(wav_file)
     channels.append(data)
 
+```
+
+Illustration of hydrophone array in space.
+```{python}
+#| code-fold: true
+#| label:        Hydrophone array in space
+#| fig-cap:      "Hydrophone Array Positions"
+#| fig-align: center
+#| out-width: 100%
+#| fig-format: svg
+
+# Define coordinates
+points = {
+    'H1': (14, 0, 0),
+    'H2': (0, 0, 0),
+    'H3': (-14, 0, 0),
+}
+
+# Initialize plot
+fig = plt.figure(figsize=(16, 9))
+ax = fig.add_subplot(111, projection='3d')
+
+# Plot points as 3D cylindrical shapes
+for point, (x, y, z) in points.items():
+    # Create cylinder
+    radius = 0.5
+    height = 2.5
+    theta = np.linspace(0, 2 * np.pi, 30)
+    x_cyl = radius * np.cos(theta)
+    y_cyl = radius * np.sin(theta)
+    z_cyl = np.linspace(z - height/2, z + height/2, 30)
+    
+    # Meshgrid for cylindrical surface
+    X_cyl, Z_cyl = np.meshgrid(x_cyl, z_cyl)
+    Y_cyl, Z_cyl = np.meshgrid(y_cyl, z_cyl)
+    
+    # Offset cylinders to the point location
+    ax.plot_surface(X_cyl + x, Z_cyl, Y_cyl + y, color='b', alpha=0.9)
+    x_line = np.linspace(-30, 30, 100)
+    y_line = np.zeros(100)
+    z_line = np.zeros(100)
+    ax.plot(x_line, y_line, z_line, color='black', linewidth=2, linestyle='-.')
+
+    x_line = np.zeros(100)
+    y_line = np.linspace(-10, 10, 100)
+    z_line = np.zeros(100)
+    ax.plot(x_line, y_line, z_line, color='black', linewidth=2, linestyle='-.')
+
+    ax.text(x, y, z + height * 0.5, f"{point}", color="red", ha="center")
+
+
+ax.text(0, 10, 0, "North", color="#181818", ha="center", fontsize=15, bbox={'facecolor': 'lightgrey', 'edgecolor': 'white', 'boxstyle': 'round', 'alpha': 0.75})
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Z')
+ax.set_xlim(-20, 20)
+ax.set_ylim(-10, 10)
+ax.set_zlim(-5, 5)
+ax.set_title("3D Cylindrical Shapes at Points H1, H2, H3")
+
+plt.show()
 ```
 
 Graph of waveform and spectrogram for each hydrophone.
